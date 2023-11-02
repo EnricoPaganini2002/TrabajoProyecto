@@ -1,0 +1,168 @@
+@model IEnumerable<TrabajoProyecto.Models.Tarea>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<!-- Modal -->
+<div class="modal fade" id="ModalTarea" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="TareaID" value="0" />
+                    <div>
+                        <label class="control-label">Titulo</label>
+                        <input type="text" class="form-control" id="Titulo" autocomplete="off"
+                            onkeyup="this.value = this.value.toUpperCase()" />
+                    </div>
+                    <div>
+                        <label class="control-label">Descripcion</label>
+                        <textarea name="" id="Descripcion" rows="5" cols="60" placeholder="Escribe la descripcion aqui" autocomplete="off"
+                            onkeyup="this.value = this.value.toUpperCase()"></textarea>
+                    </div>
+
+
+                    <div>
+                        <label class="control-label">Fecha Carga</label>
+                        <input type="date" id="FechaCarga" name="FechaCarga" class="form-control input-centrar2"
+                            required />
+                        <span class="text-danger"></span> <!-- Mensaje de error de fecha -->
+                    </div>
+
+
+                    <div>
+                        <label class="control-label">Fecha Vencimiento</label>
+                        <input type="date" id="FechaVencimiento" name="FechaVencimiento"
+                            class="form-control input-centrar2" required />
+                        <span class="text-danger"></span> <!-- Mensaje de error de fecha -->
+                    </div>
+                    <div class="mb-2">
+                        <label class="control-label">Asignatura</label>
+                        @Html.DropDownList("AsignaturaID", null, "-- SELECCIONE UNA ASIGNATURA --", new
+                            {
+                                @class =
+                                 "form-control"
+                            })
+                    </div>
+
+                    @* <div>
+                        <label class="control-label">Subcategorias</label>
+                        @Html.DropDownList("ProfesorID", null, htmlAttributes: new { @class = "form-control" })
+                    </div> *@
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarTarea()" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1>Index</h1>
+
+
+<div>
+    <h1 class="display-4">Tarea</h1>
+
+
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+
+            <div class="mb-2">
+                <button type="button" onclick="VaciarFormulario()" class="btn btn-primary boton2" data-bs-toggle="modal"
+                    data-bs-target="#ModalTarea">
+                    Nuevo
+                </button>
+            </div>
+        }
+        else
+        {
+        }
+    }
+
+
+
+
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Descripcion</th>
+                <th>Fecha Carga</th>
+                <th>Fecha Vencimiento</th>
+                <th>Asignatura</th>
+            </tr>
+
+        </thead>
+        <tbody id="tbody-tareas">
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/tarea.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#ProfesorID, #AsignaturaID").change(function () {
+                ComboProfesores();
+            });
+        });
+
+        function ComboProfesores() {
+            let profesorID = $("#ProfesorID").val();
+            let asignaturaID = $("#AsignaturaID").val();
+            
+            // Puedes enviar profesorID y asignaturaID como parámetros en tu solicitud AJAX
+            $.ajax({
+                // la URL para la petición
+                url: '../../Tareas/ComboProfesores',
+                // la información a enviar
+                data: { ProfesorID: profesorID, AsignaturaID: asignaturaID },
+                // especifica si será una petición POST o GET
+                type: 'POST',
+                // el tipo de información que se espera de respuesta
+                dataType: 'json',
+                // código a ejecutar si la petición es satisfactoria;
+                // la respuesta es pasada como argumento a la función
+                success: function (tarea) {
+
+                    $("#ProfesorID").empty();
+
+                    if (profesorID == 0 || asignaturaID == 0) {
+                        $("#AsignaturaID").append("<option value='0'>[SELECCIONE UN ASIGNATURA]</option>");
+                    }
+                    else {
+                        if (profesor.length == 0) {
+                            $("#ProfesorID").append("<option value='0'>EL PROFESOR NO CONTIENE UN AISGNATURA</option>");
+
+                        }
+                        else {
+                            $.each(tarea, function (index, tarea) {
+                                $("#ProfesorID").append("<option value='" + tarea.profesorID + "'>" + tarea.nombreProfesor + "</option>");
+                            });
+                        }
+                    }
+
+                }
+
+                // código a ejecutar si la petición falla;
+                // son pasados como argumentos a la función
+                // el objeto de la petición en crudo y código de estatus de la petición
+                error: function (xhr, status) {
+                    alert('Disculpe, existió un problema');
+                }
+            });
+        }
+    </script>
+  
+}
+
+

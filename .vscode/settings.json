@@ -1,0 +1,26 @@
+{
+    "dotnet.defaultSolution": "TrabajoProyecto.sln",
+    "cSpell.language": "es,es-ES,en,en-GB,en-US",
+    "cSpell.words": [
+        "boton",
+        "Boton",
+        "Compelto",
+        "Desahabilitar",
+        "Desahabilitaralumno",
+        "duracion",
+        "Duracion",
+        "ESTETICA",
+        "jquery",
+        "labelledby",
+        "onclick",
+        "onkeyup",
+        "stylesheet",
+        "Subcategoria",
+        "tabindex",
+        "tbody",
+        "thead",
+        "toggleable"
+    ],
+    "console-ninja.output.showLogsFromMultipleRunningToolsTogether": true,
+    "console-ninja.output.showLogsOnlyFromOpenedFiles": true
+}

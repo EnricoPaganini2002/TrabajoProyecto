@@ -1,0 +1,164 @@
+@model IEnumerable<TrabajoProyecto.Models.Profesor>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Modal -->
+<div class="modal fade" id="ModalProfesor" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Profesor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="ProfesorID" value="0" />
+                <div>
+                    <label class="control-label">Nombre Completo</label>
+                    <input type="text" class="form-control" id="NombreCompletoProfesor" autocomplete="off"
+                        onkeyup="this.value = this.value.toUpperCase()" required />
+                </div>
+                <div>
+                    <label class="control-label">D.N.I</label>
+                    <input type="text" class="form-control" id="DNI" autocomplete="off" onkeyup="validarDNI(this)"
+                        required />
+                    <span id="dni-error" class="text-danger"></span>
+
+
+                    <!-- Elemento para mostrar el mensaje de error -->
+                </div>
+
+                <div>
+                    <label class="control-label">Fecha Nacimiento</label>
+                    <input type="date" id="FechaNacimiento" name="FechaNacimiento" class="form-control input-centrar2"
+                        required />
+                    <span class="text-danger"></span> <!-- Mensaje de error de fecha -->
+                </div>
+                <div>
+                    <label class="control-label">Dirrecion</label>
+                    <input type="text" class="form-control" id="Dirrecion" autocomplete="off"
+                        onkeyup="this.value = this.value.toUpperCase()" required />
+                </div>
+                <div>
+                    <label class="control-label">Correo</label>
+                    <input type="text" class="form-control disable" id="Correo" autocomplete="off"
+                        onkeyup="this.value = this.value.toUpperCase()" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" onclick="GuardarProfesor()" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalProfesorAsignatura" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar Profesor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ProfesorAsignaturaID" value="0" />
+                <input type="hidden" id="ProfesorModalID" value="0" />
+
+                <label class="control-label">Asignaturas</label>
+                </label>
+                @Html.DropDownList("AsignaturaID", null, "-- SELECCIONE UNA ASIGNATURA --", new
+                    {
+                        @class =
+                         "form-control"
+                    })
+            </div>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>Nombre Asignaturas</th>
+                    </tr>
+
+                </thead>
+                <tbody id="tbody-profesorAsignatura">
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" onclick="GuardarProfesorAsignatura()" class="btn btn-primary">Guardar
+                    Cambios</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<h1>Index</h1>
+
+<div>
+    <h1 class="display-4">Profesor</h1>
+
+    @{
+        if (User.Identity.IsAuthenticated)
+        {
+            <div class="mb-2">
+                <button type="button" onclick="VaciarFormulario()" class="btn btn-primary boton2" data-bs-toggle="modal"
+                    data-bs-target="#ModalProfesor">
+                    Nuevo
+                </button>
+            </div>
+        }
+        else
+        {
+        }
+    }
+
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Nombre Completo Profesor</th>
+                <th>D.N.I</th>
+                <th>Fecha Nacimiento</th>
+                <th>Dirrecion</th>
+                <th>Correo</th>
+            </tr>
+
+        </thead>
+        <tbody id="tbody-profesor">
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/profesor.js"></script>
+    <script src="~/js/clienteFecha.js"></script>
+    <script>
+
+        function esNumerico(valor) {
+            if (valor.trim() === '') {
+                return false;
+            }
+
+            return !isNaN(valor);
+        }
+
+        function validarDNI(input) {
+            const valor = input.value;
+            const dniError = document.getElementById("dni-error");
+
+            if (!esNumerico(valor)) {
+                dniError.textContent = 'El DNI debe ser un valor numérico en forma de cadena.';
+                input.value = '';
+            } else {
+                dniError.textContent = ''; // Borra el mensaje de error si es válido.
+            }
+        }
+
+
+    </script>
+
+
+    </script>
+
+}
